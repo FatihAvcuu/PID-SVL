@@ -1,0 +1,7 @@
+<launch>
+
+    <node pkg="pid" type="pidSub" name="pidSub" output="screen">
+        <rosparam command="load" file="$(find pid)/config/default.yaml" />
+    </node>
+
+</launch>

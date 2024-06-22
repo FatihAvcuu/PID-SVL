@@ -1,4 +1,6 @@
-kp: 2.58061793391176
+kp: 2.85
 ki: 0
-kd: 1.33251055634828
+kd: 2
 car_velocity: 4
+lp: 7
+odom_topic: "/odom_2"

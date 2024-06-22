@@ -1,0 +1,6 @@
+kp: 0.012
+ki: 0.0035
+car_velocity: 4
+lp: 3.4
+axs: 1.37
+odom_topic: "/odom_2"

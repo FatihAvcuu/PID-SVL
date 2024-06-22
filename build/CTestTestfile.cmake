@@ -6,3 +6,5 @@
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
 subdirs("pid")
+subdirs("pure_pursuit")
+subdirs("pure_pursuit_pid_2")

@@ -12,25 +12,19 @@
 #include <cmath>
 #include <memory>
 
-
 namespace get_pid_info
 {
 class PID
 {
   public:
     PID();
-    double kp , ki,  kd;
-
+    double kp , ki,kd;
     double calc(double error);
-
-
   private:
-
     double calcIntegral(double error);
+    double calcProportional(double error,double ld,double cerror);
     double calcDerivative();
-
     double LastIntegral = 0;
- 
     std::vector<double> ErrorVector = {0};
 };
 } 

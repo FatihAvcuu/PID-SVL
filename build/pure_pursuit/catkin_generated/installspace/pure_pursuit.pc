@@ -1,0 +1,8 @@
+prefix=/home/fatih/Desktop/ilayda/PID_SVL/install
+
+Name: pure_pursuit
+Description: Description of pure_pursuit
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: 

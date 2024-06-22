@@ -509,6 +509,24 @@ pid_SOURCE_DIR:STATIC=/home/fatih/Desktop/ilayda/PID_SVL/src/pid
 //The directory containing a CMake configuration file for pluginlib.
 pluginlib_DIR:PATH=/opt/ros/noetic/share/pluginlib/cmake
 
+//Value Computed by CMake
+pure_pursuit_BINARY_DIR:STATIC=/home/fatih/Desktop/ilayda/PID_SVL/build/pure_pursuit
+
+//Value Computed by CMake
+pure_pursuit_SOURCE_DIR:STATIC=/home/fatih/Desktop/ilayda/PID_SVL/src/pure_pursuit
+
+//Value Computed by CMake
+pure_pursuit_pid_2_BINARY_DIR:STATIC=/home/fatih/Desktop/ilayda/PID_SVL/build/pure_pursuit_pid_2
+
+//Value Computed by CMake
+pure_pursuit_pid_2_SOURCE_DIR:STATIC=/home/fatih/Desktop/ilayda/PID_SVL/src/pure_pursuit_pid_2
+
+//Value Computed by CMake
+pure_pursuit_pid_BINARY_DIR:STATIC=/home/fatih/Desktop/ilayda/PID_SVL/build/pure_pursuit_pid
+
+//Value Computed by CMake
+pure_pursuit_pid_SOURCE_DIR:STATIC=/home/fatih/Desktop/ilayda/PID_SVL/src/pure_pursuit_pid
+
 //The directory containing a CMake configuration file for rosbag.
 rosbag_DIR:PATH=/opt/ros/noetic/share/rosbag/cmake
 
@@ -550,6 +568,18 @@ rostime_DIR:PATH=/opt/ros/noetic/share/rostime/cmake
 
 //The directory containing a CMake configuration file for sensor_msgs.
 sensor_msgs_DIR:PATH=/opt/ros/noetic/share/sensor_msgs/cmake
+
+//Value Computed by CMake
+stanley2_BINARY_DIR:STATIC=/home/fatih/Desktop/ilayda/PID_SVL/build/stanley2
+
+//Value Computed by CMake
+stanley2_SOURCE_DIR:STATIC=/home/fatih/Desktop/ilayda/PID_SVL/src/stanley2
+
+//Value Computed by CMake
+stanley_BINARY_DIR:STATIC=/home/fatih/Desktop/ilayda/PID_SVL/build/stanley
+
+//Value Computed by CMake
+stanley_SOURCE_DIR:STATIC=/home/fatih/Desktop/ilayda/PID_SVL/src/stanley
 
 //The directory containing a CMake configuration file for std_msgs.
 std_msgs_DIR:PATH=/opt/ros/noetic/share/std_msgs/cmake
@@ -732,7 +762,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=5
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=7
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

@@ -1,0 +1,7 @@
+<launch>
+
+    <node pkg="pure_pursuit_pid_2" type="pidSub3" name="pidSub3" output="screen">
+        <rosparam command="load" file="$(find pure_pursuit_pid_2)/config/default.yaml" />
+    </node>
+
+</launch>

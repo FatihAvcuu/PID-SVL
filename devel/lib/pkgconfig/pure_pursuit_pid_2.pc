@@ -1,0 +1,8 @@
+prefix=/home/fatih/Desktop/ilayda/PID_SVL/devel
+
+Name: pure_pursuit_pid_2
+Description: Description of pure_pursuit_pid_2
+Version: 0.0.0
+Cflags: -I/home/fatih/Desktop/ilayda/PID_SVL/src/pure_pursuit_pid_2/include
+Libs: -L${prefix}/lib 
+Requires: 

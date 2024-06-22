@@ -90,6 +90,7 @@ pid/CMakeFiles/pidSub.dir/src/pid_subscriber.cpp.o
  /opt/ros/noetic/include/geometry_msgs/Vector3.h
  /opt/ros/noetic/include/geometry_msgs/Vector3Stamped.h
  /opt/ros/noetic/include/nav_msgs/Odometry.h
+ /opt/ros/noetic/include/nav_msgs/Path.h
  /opt/ros/noetic/include/ros/advertise_options.h
  /opt/ros/noetic/include/ros/advertise_service_options.h
  /opt/ros/noetic/include/ros/assert.h
@@ -206,6 +207,7 @@ pid/CMakeFiles/pidSub.dir/src/pid_subscriber_node.cpp.o
  /opt/ros/noetic/include/geometry_msgs/Vector3.h
  /opt/ros/noetic/include/geometry_msgs/Vector3Stamped.h
  /opt/ros/noetic/include/nav_msgs/Odometry.h
+ /opt/ros/noetic/include/nav_msgs/Path.h
  /opt/ros/noetic/include/ros/advertise_options.h
  /opt/ros/noetic/include/ros/advertise_service_options.h
  /opt/ros/noetic/include/ros/assert.h

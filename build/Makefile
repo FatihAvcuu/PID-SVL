@@ -1142,6 +1142,32 @@ pcl_msgs_generate_messages_lisp/fast:
 	$(MAKE) -f pid/CMakeFiles/pcl_msgs_generate_messages_lisp.dir/build.make pid/CMakeFiles/pcl_msgs_generate_messages_lisp.dir/build
 .PHONY : pcl_msgs_generate_messages_lisp/fast
 
+#=============================================================================
+# Target rules for targets named pure_pursuitSUB
+
+# Build rule for target.
+pure_pursuitSUB: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pure_pursuitSUB
+.PHONY : pure_pursuitSUB
+
+# fast build rule for target.
+pure_pursuitSUB/fast:
+	$(MAKE) -f pure_pursuit/CMakeFiles/pure_pursuitSUB.dir/build.make pure_pursuit/CMakeFiles/pure_pursuitSUB.dir/build
+.PHONY : pure_pursuitSUB/fast
+
+#=============================================================================
+# Target rules for targets named pidSub3
+
+# Build rule for target.
+pidSub3: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pidSub3
+.PHONY : pidSub3
+
+# fast build rule for target.
+pidSub3/fast:
+	$(MAKE) -f pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/build.make pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/build
+.PHONY : pidSub3/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1230,6 +1256,8 @@ help:
 	@echo "... pcl_msgs_generate_messages_eus"
 	@echo "... pcl_msgs_generate_messages_nodejs"
 	@echo "... pcl_msgs_generate_messages_lisp"
+	@echo "... pure_pursuitSUB"
+	@echo "... pidSub3"
 .PHONY : help
 
 

@@ -1,0 +1,7 @@
+<launch>
+
+    <node pkg="pure_pursuit" type="pure_pursuitSUB" name="pure_pursuitSUB" output="screen">
+        <rosparam command="load" file="$(find pure_pursuit)/config/default.yaml" />
+    </node>
+
+</launch>

@@ -134,7 +134,6 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/fatih/Desktop/ilayda/PID_SVL/build/pid/cmake_install.cmake")
   include("/home/fatih/Desktop/ilayda/PID_SVL/build/pure_pursuit/cmake_install.cmake")
   include("/home/fatih/Desktop/ilayda/PID_SVL/build/pure_pursuit_pid_2/cmake_install.cmake")
-  include("/home/fatih/Desktop/ilayda/PID_SVL/build/stanley/cmake_install.cmake")
 
 endif()
 

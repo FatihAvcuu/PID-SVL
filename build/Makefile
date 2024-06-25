@@ -1168,19 +1168,6 @@ pidSub3/fast:
 	$(MAKE) -f pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/build.make pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/build
 .PHONY : pidSub3/fast
 
-#=============================================================================
-# Target rules for targets named StanleySUB
-
-# Build rule for target.
-StanleySUB: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 StanleySUB
-.PHONY : StanleySUB
-
-# fast build rule for target.
-StanleySUB/fast:
-	$(MAKE) -f stanley/CMakeFiles/StanleySUB.dir/build.make stanley/CMakeFiles/StanleySUB.dir/build
-.PHONY : StanleySUB/fast
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1271,7 +1258,6 @@ help:
 	@echo "... pcl_msgs_generate_messages_lisp"
 	@echo "... pure_pursuitSUB"
 	@echo "... pidSub3"
-	@echo "... StanleySUB"
 .PHONY : help
 
 

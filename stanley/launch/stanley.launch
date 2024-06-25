@@ -1,0 +1,7 @@
+<launch>
+
+    <node pkg="stanley" type="StanleySUB" name="StanleySUB" output="screen">
+        <rosparam command="load" file="$(find stanley)/config/default.yaml" />
+    </node>
+
+</launch>

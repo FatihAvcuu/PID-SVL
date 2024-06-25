@@ -57,7 +57,6 @@ all: gtest/all
 all: pid/all
 all: pure_pursuit/all
 all: pure_pursuit_pid_2/all
-all: stanley/all
 
 .PHONY : all
 
@@ -66,7 +65,6 @@ preinstall: gtest/preinstall
 preinstall: pid/preinstall
 preinstall: pure_pursuit/preinstall
 preinstall: pure_pursuit_pid_2/preinstall
-preinstall: stanley/preinstall
 
 .PHONY : preinstall
 
@@ -80,7 +78,6 @@ clean: gtest/clean
 clean: pid/clean
 clean: pure_pursuit/clean
 clean: pure_pursuit_pid_2/clean
-clean: stanley/clean
 
 .PHONY : clean
 
@@ -261,24 +258,6 @@ pure_pursuit_pid_2/clean: pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/clean
 .PHONY : pure_pursuit_pid_2/clean
 
 #=============================================================================
-# Directory level rules for directory stanley
-
-# Recursive "all" directory target.
-stanley/all: stanley/CMakeFiles/StanleySUB.dir/all
-
-.PHONY : stanley/all
-
-# Recursive "preinstall" directory target.
-stanley/preinstall:
-
-.PHONY : stanley/preinstall
-
-# Recursive "clean" directory target.
-stanley/clean: stanley/CMakeFiles/StanleySUB.dir/clean
-
-.PHONY : stanley/clean
-
-#=============================================================================
 # Target rules for target CMakeFiles/doxygen.dir
 
 # All Build rule for target.
@@ -421,7 +400,7 @@ gtest/googlemock/CMakeFiles/gmock_main.dir/all: gtest/googlemock/CMakeFiles/gmoc
 gtest/googlemock/CMakeFiles/gmock_main.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) -f gtest/googlemock/CMakeFiles/gmock_main.dir/build.make gtest/googlemock/CMakeFiles/gmock_main.dir/depend
 	$(MAKE) -f gtest/googlemock/CMakeFiles/gmock_main.dir/build.make gtest/googlemock/CMakeFiles/gmock_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=7,8 "Built target gmock_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=3,4 "Built target gmock_main"
 .PHONY : gtest/googlemock/CMakeFiles/gmock_main.dir/all
 
 # Build rule for subdir invocation for target.
@@ -448,7 +427,7 @@ gtest/googlemock/CMakeFiles/gmock_main.dir/clean:
 gtest/googlemock/CMakeFiles/gmock.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) -f gtest/googlemock/CMakeFiles/gmock.dir/build.make gtest/googlemock/CMakeFiles/gmock.dir/depend
 	$(MAKE) -f gtest/googlemock/CMakeFiles/gmock.dir/build.make gtest/googlemock/CMakeFiles/gmock.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=5,6 "Built target gmock"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=1,2 "Built target gmock"
 .PHONY : gtest/googlemock/CMakeFiles/gmock.dir/all
 
 # Build rule for subdir invocation for target.
@@ -475,7 +454,7 @@ gtest/googlemock/CMakeFiles/gmock.dir/clean:
 gtest/googletest/CMakeFiles/gtest_main.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest_main.dir/build.make gtest/googletest/CMakeFiles/gtest_main.dir/depend
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest_main.dir/build.make gtest/googletest/CMakeFiles/gtest_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=11,12 "Built target gtest_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=7,8 "Built target gtest_main"
 .PHONY : gtest/googletest/CMakeFiles/gtest_main.dir/all
 
 # Build rule for subdir invocation for target.
@@ -502,7 +481,7 @@ gtest/googletest/CMakeFiles/gtest_main.dir/clean:
 gtest/googletest/CMakeFiles/gtest.dir/all:
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/depend
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=9,10 "Built target gtest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=5,6 "Built target gtest"
 .PHONY : gtest/googletest/CMakeFiles/gtest.dir/all
 
 # Build rule for subdir invocation for target.
@@ -529,7 +508,7 @@ gtest/googletest/CMakeFiles/gtest.dir/clean:
 pid/CMakeFiles/pidSub.dir/all:
 	$(MAKE) -f pid/CMakeFiles/pidSub.dir/build.make pid/CMakeFiles/pidSub.dir/depend
 	$(MAKE) -f pid/CMakeFiles/pidSub.dir/build.make pid/CMakeFiles/pidSub.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=13,14,15,16 "Built target pidSub"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=9,10,11,12 "Built target pidSub"
 .PHONY : pid/CMakeFiles/pidSub.dir/all
 
 # Build rule for subdir invocation for target.
@@ -2311,7 +2290,7 @@ pid/CMakeFiles/pcl_msgs_generate_messages_lisp.dir/clean:
 pure_pursuit/CMakeFiles/pure_pursuitSUB.dir/all:
 	$(MAKE) -f pure_pursuit/CMakeFiles/pure_pursuitSUB.dir/build.make pure_pursuit/CMakeFiles/pure_pursuitSUB.dir/depend
 	$(MAKE) -f pure_pursuit/CMakeFiles/pure_pursuitSUB.dir/build.make pure_pursuit/CMakeFiles/pure_pursuitSUB.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=22,23,24,25 "Built target pure_pursuitSUB"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=18,19,20,21 "Built target pure_pursuitSUB"
 .PHONY : pure_pursuit/CMakeFiles/pure_pursuitSUB.dir/all
 
 # Build rule for subdir invocation for target.
@@ -2338,7 +2317,7 @@ pure_pursuit/CMakeFiles/pure_pursuitSUB.dir/clean:
 pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/all:
 	$(MAKE) -f pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/build.make pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/depend
 	$(MAKE) -f pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/build.make pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=17,18,19,20,21 "Built target pidSub3"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=13,14,15,16,17 "Built target pidSub3"
 .PHONY : pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/all
 
 # Build rule for subdir invocation for target.
@@ -2357,33 +2336,6 @@ pidSub3: pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/rule
 pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/clean:
 	$(MAKE) -f pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/build.make pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/clean
 .PHONY : pure_pursuit_pid_2/CMakeFiles/pidSub3.dir/clean
-
-#=============================================================================
-# Target rules for target stanley/CMakeFiles/StanleySUB.dir
-
-# All Build rule for target.
-stanley/CMakeFiles/StanleySUB.dir/all:
-	$(MAKE) -f stanley/CMakeFiles/StanleySUB.dir/build.make stanley/CMakeFiles/StanleySUB.dir/depend
-	$(MAKE) -f stanley/CMakeFiles/StanleySUB.dir/build.make stanley/CMakeFiles/StanleySUB.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles --progress-num=1,2,3,4 "Built target StanleySUB"
-.PHONY : stanley/CMakeFiles/StanleySUB.dir/all
-
-# Build rule for subdir invocation for target.
-stanley/CMakeFiles/StanleySUB.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles 4
-	$(MAKE) -f CMakeFiles/Makefile2 stanley/CMakeFiles/StanleySUB.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/fatih/Desktop/ilayda/PID_SVL/build/CMakeFiles 0
-.PHONY : stanley/CMakeFiles/StanleySUB.dir/rule
-
-# Convenience name for target.
-StanleySUB: stanley/CMakeFiles/StanleySUB.dir/rule
-
-.PHONY : StanleySUB
-
-# clean rule for target.
-stanley/CMakeFiles/StanleySUB.dir/clean:
-	$(MAKE) -f stanley/CMakeFiles/StanleySUB.dir/build.make stanley/CMakeFiles/StanleySUB.dir/clean
-.PHONY : stanley/CMakeFiles/StanleySUB.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -1,2 +1,2 @@
-pid:pure_pursuit:pure_pursuit_pid_2:stanley
+pid:pure_pursuit:pure_pursuit_pid_2
 -DCATKIN_DEVEL_PREFIX=/home/fatih/Desktop/ilayda/PID_SVL/devel -DCMAKE_INSTALL_PREFIX=/home/fatih/Desktop/ilayda/PID_SVL/install -G Unix Makefiles

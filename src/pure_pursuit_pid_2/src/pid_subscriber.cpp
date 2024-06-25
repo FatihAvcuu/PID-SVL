@@ -211,8 +211,21 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     m_parameter_publisher.publish(output);
 
     //desired angle
+     auto simdi = std::chrono::steady_clock::now();
+        auto gecen_sure_saniye = std::chrono::duration_cast<std::chrono::seconds>(simdi - baslangic_zamani);
+        auto gecen_sure_milisaniye = std::chrono::duration_cast<std::chrono::milliseconds>(simdi - baslangic_zamani);
+        auto saniye = gecen_sure_saniye.count();
+        auto milisaniye = gecen_sure_milisaniye.count();
 
+         std::ofstream dosya("/home/fatih/Desktop/ilayda/PID_SVL/src/pure_pursuit_pid_2/include/error_stanley.csv", std::ios::app);
+    if (dosya.is_open()) {
+        dosya << saniye << "." << milisaniye  << ";" << c_error  << std::endl;
+        dosya.close();
+    } else {
+        std::cout << "Dosya acilamadi" << std::endl;
+    }
 
+    //std::cout << desired << " a " << anglee << std::endl;
 
     x = odom_datas_x[min_i2];
     y = odom_datas_y[min_i2];
@@ -271,11 +284,6 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
         c_error= (abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt(pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2)+1));
     }
 
-     auto simdi = std::chrono::steady_clock::now();
-        auto gecen_sure_saniye = std::chrono::duration_cast<std::chrono::seconds>(simdi - baslangic_zamani);
-        auto gecen_sure_milisaniye = std::chrono::duration_cast<std::chrono::milliseconds>(simdi - baslangic_zamani);
-        auto saniye = gecen_sure_saniye.count();
-        auto milisaniye = gecen_sure_milisaniye.count();
 
         double desired = 0;
         desired = pure_pursite_ctr.calc(alpha,ld,axs)*4 + desired_pid.calc(c_error,ld,c_calc) ;
@@ -303,15 +311,7 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
         
         
         
-         std::ofstream dosya("/home/fatih/Desktop/ilayda/PID_SVL/src/pure_pursuit_pid_2/include/error_stanley.csv", std::ios::app);
-    if (dosya.is_open()) {
-        dosya << saniye << "." << milisaniye  << ";" << anglee << ";" <<  desired << std::endl;
-        dosya.close();
-    } else {
-        std::cout << "Dosya acilamadi" << std::endl;
-    }
 
-    std::cout << desired << " a " << anglee << std::endl;
 
 }
 

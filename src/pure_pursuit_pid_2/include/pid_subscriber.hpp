@@ -53,6 +53,7 @@ class PID_SUBS
     std::string odom_topic;
     bool readParameters();
     get_pid_info::PID wheel_pid;
+    get_pid_info::PID desired_pid;
     get_pure_pursite::PP pure_pursite_ctr;
     std::chrono::time_point<std::chrono::steady_clock> baslangic_zamani;
     ros::Subscriber sub;

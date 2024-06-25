@@ -18,6 +18,7 @@ SUBS::SUBS(ros::NodeHandle& t_node_handle)
     path_sub = m_node_handle.subscribe("/path_publisher/ShortestPath", 10, &SUBS::PathCallback, this);
     m_parameter_publisher = m_node_handle.advertise<std_msgs::String>("/SUBS", 10);
     ROS_INFO("Successfully launched node Subscriber.");
+    baslangic_zamani = std::chrono::steady_clock::now();
 
     marker.header.frame_id = "map";
     marker.header.stamp = ros::Time::now();
@@ -72,8 +73,14 @@ void SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
             min_i = i;
             last_min_i = i;
         }
+        if (minValue2 > sqrt(xa*xa+ya*ya) )
+        {
+            minValue2= sqrt(xa*xa+ya*ya);
+            min_i2 = i;
+        }
     }
     minValue = INT_MAX;
+    minValue2 = INT_MAX;
     last_i = min_i;
     double xa0 = odom_datas_x[min_i] - x;
     double ya0 = odom_datas_y[min_i] - y;
@@ -109,13 +116,75 @@ void SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     svl_msg.header.stamp = ros::Time::now();
     svl_msg.header.frame_id = "base_link"; 
     svl_msg.twist_cmd.twist.linear.x = car_velocity; 
-    svl_msg.twist_cmd.twist.angular.z = pure_pursite_ctr.calc(alpha,ld,axs)*4.2;
+    anglee =pure_pursite_ctr.calc(alpha,ld,axs)*4.2;
+    svl_msg.twist_cmd.twist.angular.z = anglee;
     vehicle_cmd_pub.publish(svl_msg);
     std_msgs::String output;
     std::stringstream ss;
     ss << "Received Odometry Message: Seq: ";;
     output.data = ss.str();
     m_parameter_publisher.publish(output);
+
+    //desired angle
+
+    auto simdi = std::chrono::steady_clock::now();
+    auto gecen_sure_saniye = std::chrono::duration_cast<std::chrono::seconds>(simdi - baslangic_zamani);
+    auto gecen_sure_milisaniye = std::chrono::duration_cast<std::chrono::milliseconds>(simdi - baslangic_zamani);
+    auto saniye = gecen_sure_saniye.count();
+    auto milisaniye = gecen_sure_milisaniye.count();
+
+    x = odom_datas_x[min_i2];
+    y = odom_datas_y[min_i2];
+
+    if(min_i2 == 0){
+        min_i2 +=1;
+    }
+    yaw = atan2(odom_datas_y[min_i2]-odom_datas_y[min_i2-1],odom_datas_x[min_i2]-odom_datas_x[min_i2-1]);
+    while(true){
+    if(yaw > M_PI_2) { yaw -= M_PI;}
+    else if(yaw < -M_PI_2) { yaw += M_PI;}
+    else{break;}
+    }
+    xa2 = odom_datas_x[min_i] - x;
+    ya2 = odom_datas_y[min_i] - y;
+    ld= sqrt(xa2*xa2+ya2*ya2);
+    alpha = atan(ya2 / xa2) - yaw;
+    if(alpha > M_PI_2) { alpha -= M_PI;}
+    if(alpha < -M_PI_2) { alpha += M_PI;}
+
+    desired = pure_pursite_ctr.calc(alpha,ld,axs)*4.2;
+
+        if (desired>2)
+    {
+        desired=2;
+    }
+    if (desired<-2)
+    {
+        desired=-2;
+    }
+    
+    if (anglee > 2)
+    {
+        anglee=2;
+    }
+    if (anglee < -2)
+    {
+        anglee=-2;
+    }
+    if (isnan(desired))
+    {
+        desired=0;
+    }
+
+    std::ofstream dosya("/home/fatih/Desktop/ilayda/PID_SVL/src/pure_pursuit/include/error_pp.csv", std::ios::app);
+    if (dosya.is_open()) {
+        dosya << saniye << "." << milisaniye  << ";" << anglee << ";" <<  desired << std::endl;
+        dosya.close();
+    } else {
+        std::cout << "Dosya acilamadi" << std::endl;
+    }
+
+    std::cout << desired << " a " << anglee << std::endl;
 }
 
 void SUBS::PathCallback(const nav_msgs::Path::ConstPtr& msg)

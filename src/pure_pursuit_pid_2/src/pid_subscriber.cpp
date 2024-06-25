@@ -14,6 +14,10 @@ PID_SUBS::PID_SUBS(ros::NodeHandle& t_node_handle)
     }
     wheel_pid.kp=kp1;
     wheel_pid.ki=ki1;
+    baslangic_zamani = std::chrono::steady_clock::now();
+
+    desired_pid.kp=kp1;
+    desired_pid.ki=ki1;
     vehicle_cmd_pub = m_node_handle.advertise<autoware_msgs::VehicleCmd>("/vehicle_cmd", 10);
     marker_pub = m_node_handle.advertise<visualization_msgs::Marker>("visualization_marker", 10);
     sim_sub = m_node_handle.subscribe(odom_topic, 10, &PID_SUBS::SimOdomCallback, this);
@@ -169,33 +173,35 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     }
     if (  0  < waytrack)
     {
-        c_calc= -(abs(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1]))*((x+lp*cos(yaw)*10) - odom_datas_x[min_i])    +odom_datas_y[min_i] - (y+lp*sin(yaw)*10))/sqrt((((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1]))*((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1])))+1));
+        c_calc= -(abs(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1]))*((x+lp*cos(yaw)*10) - odom_datas_x[min_i])    +odom_datas_y[min_i] - (y+lp*sin(yaw)*10))/sqrt((pow(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1])),2))+1));
     }
     else
     {
-        c_calc= abs(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1]))*((x+lp*cos(yaw)*10) - odom_datas_x[min_i])    +odom_datas_y[min_i] - (y+lp*sin(yaw)*10))/sqrt((((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1]))*((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1])))+1);
+        c_calc= abs(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1]))*((x+lp*cos(yaw)*10) - odom_datas_x[min_i])    +odom_datas_y[min_i] - (y+lp*sin(yaw)*10))/sqrt((pow(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1])),2))+1);
     }
     if( odom_datas_x[min_i2+1] == odom_datas_x[min_i2] || odom_datas_y[min_i2+1] == odom_datas_y[min_i2]){
         c_error= last_c_error;
     }
     else if (  0  > waytrack2){
-        last_c_error= -(abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2]))*((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])))+1));
-        c_error= -(abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2]))*((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])))+1));
+        last_c_error= -(abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
+        c_error= -(abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
     }
     else
     {
-        last_c_error= (abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2]))*((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])))+1));
-        c_error= (abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2]))*((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])))+1));
+        last_c_error= (abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
+        c_error= (abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
     }
-
+    double anglee = 0;
     svl_msg.header.stamp = ros::Time::now();
     svl_msg.header.frame_id = "base_link"; 
     svl_msg.twist_cmd.twist.linear.x = car_velocity; 
     if(ld<7){
-    svl_msg.twist_cmd.twist.angular.z = pure_pursite_ctr.calc(alpha,ld,axs)*4 + wheel_pid.calc(c_error,ld,c_calc);
+    anglee=pure_pursite_ctr.calc(alpha,ld,axs)*4 + wheel_pid.calc(c_error,ld,c_calc);
+    svl_msg.twist_cmd.twist.angular.z = anglee;
     }
     else{
-        svl_msg.twist_cmd.twist.angular.z = pure_pursite_ctr.calc(alpha,ld,axs)*4;
+    anglee =pure_pursite_ctr.calc(alpha,ld,axs)*4;
+    svl_msg.twist_cmd.twist.angular.z = anglee;
     }
     vehicle_cmd_pub.publish(svl_msg);
     std_msgs::String output;
@@ -203,6 +209,110 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     ss << "Received Odometry Message: Seq: ";;
     output.data = ss.str();
     m_parameter_publisher.publish(output);
+
+    //desired angle
+
+
+
+    x = odom_datas_x[min_i2];
+    y = odom_datas_y[min_i2];
+
+    xa0 = odom_datas_x[min_i2] - x;
+    ya0 = odom_datas_y[min_i2] - y;
+    xa2 = odom_datas_x[min_i] - x;
+    ya2 = odom_datas_y[min_i] - y;
+    if(min_i2 == 0){
+        min_i2 +=1;
+    }
+    yaw = atan2(odom_datas_y[min_i2]-odom_datas_y[min_i2-1],odom_datas_x[min_i2]-odom_datas_x[min_i2-1]);
+    while(true){
+    if(yaw > M_PI_2) { yaw -= M_PI;}
+    else if(yaw < -M_PI_2) { yaw += M_PI;}
+    else{break;}
+    }
+
+    alpha = atan(ya2 / xa2) - yaw;
+    if(alpha > M_PI_2) { alpha -= M_PI;}
+    if(alpha < -M_PI_2) { alpha += M_PI;}
+    ld= sqrt(xa2*xa2+ya2*ya2);
+
+    waytrack= atan(((y+ld*sin(yaw)*20)-odom_datas_y[min_i]) / ((x+ld*cos(yaw)*20)-odom_datas_x[min_i])) - yaw;
+    while(true){
+    if(waytrack > M_PI_2) { waytrack -= M_PI;}
+    else if(waytrack < -M_PI_2) { waytrack += M_PI;}
+    else{break;}
+    }
+
+
+    waytrack2= atan(((y-1*sin(yaw))-odom_datas_y[min_i2]) / ((x-1*cos(yaw))-odom_datas_x[min_i2])) - yaw;
+    while(true){
+    if(waytrack2 > M_PI_2) { waytrack2 -= M_PI;}
+    else if(waytrack2 < -M_PI_2) { waytrack2 += M_PI;}
+    else{break;}
+    }
+    if (  0  < waytrack)
+    {
+        c_calc= -(abs(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1]))*((x+lp*cos(yaw)*10) - odom_datas_x[min_i])    +odom_datas_y[min_i] - (y+lp*sin(yaw)*10))/sqrt((pow(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1])),2))+1));
+    }
+    else
+    {
+        c_calc= abs(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1]))*((x+lp*cos(yaw)*10) - odom_datas_x[min_i])    +odom_datas_y[min_i] - (y+lp*sin(yaw)*10))/sqrt(((pow(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1])),2))+1));
+    }
+    if( odom_datas_x[min_i2+1] == odom_datas_x[min_i2] || odom_datas_y[min_i2+1] == odom_datas_y[min_i2]){
+        c_error= last_c_error;
+    }
+    else if (  0  > waytrack2){
+       last_c_error= -(abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
+        c_error= -(abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
+    }
+    else
+    {
+        last_c_error= (abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
+        c_error= (abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt(pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2)+1));
+    }
+
+     auto simdi = std::chrono::steady_clock::now();
+        auto gecen_sure_saniye = std::chrono::duration_cast<std::chrono::seconds>(simdi - baslangic_zamani);
+        auto gecen_sure_milisaniye = std::chrono::duration_cast<std::chrono::milliseconds>(simdi - baslangic_zamani);
+        auto saniye = gecen_sure_saniye.count();
+        auto milisaniye = gecen_sure_milisaniye.count();
+
+        double desired = 0;
+        desired = pure_pursite_ctr.calc(alpha,ld,axs)*4 + desired_pid.calc(c_error,ld,c_calc) ;
+        if (desired>2)
+        {
+            desired=2;
+        }
+        if (desired<-2)
+        {
+            desired=-2;
+        }
+        
+        if (anglee > 2)
+        {
+            anglee=2;
+        }
+        if (anglee < -2)
+        {
+            anglee=-2;
+        }
+        if (isnan(desired))
+        {
+            desired=0;
+        }
+        
+        
+        
+         std::ofstream dosya("/home/fatih/Desktop/ilayda/PID_SVL/src/pure_pursuit_pid_2/include/error_stanley.csv", std::ios::app);
+    if (dosya.is_open()) {
+        dosya << saniye << "." << milisaniye  << ";" << anglee << ";" <<  desired << std::endl;
+        dosya.close();
+    } else {
+        std::cout << "Dosya acilamadi" << std::endl;
+    }
+
+    std::cout << desired << " a " << anglee << std::endl;
+
 }
 
 void PID_SUBS::PathCallback(const nav_msgs::Path::ConstPtr& msg)

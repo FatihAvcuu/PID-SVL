@@ -14,6 +14,10 @@ PID_SUBS::PID_SUBS(ros::NodeHandle& t_node_handle)
     wheel_pid.kp=kp1;
     wheel_pid.ki=ki1;
     wheel_pid.kd=kd1;
+    desired_pid.kp = kp1;
+    desired_pid.kd = kd1;
+    desired_pid.ki = ki1;
+    baslangic_zamani = std::chrono::steady_clock::now();
     vehicle_cmd_pub = m_node_handle.advertise<autoware_msgs::VehicleCmd>("/vehicle_cmd", 10);
     marker_pub = m_node_handle.advertise<visualization_msgs::Marker>("visualization_marker", 10);
     sim_sub = m_node_handle.subscribe(odom_topic, 10, &PID_SUBS::SimOdomCallback, this);
@@ -123,13 +127,73 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     svl_msg.header.stamp = ros::Time::now();
     svl_msg.header.frame_id = "base_link"; 
     svl_msg.twist_cmd.twist.linear.x = car_velocity; 
-    svl_msg.twist_cmd.twist.angular.z = wheel_pid.calc(alpha);
+    anglee=wheel_pid.calc(alpha);
+    svl_msg.twist_cmd.twist.angular.z = anglee;
     vehicle_cmd_pub.publish(svl_msg);
     std_msgs::String output;
     std::stringstream ss;
     ss << "Received Odometry Message: Seq: ";;
     output.data = ss.str();
     m_parameter_publisher.publish(output);
+
+    //desired angle
+    auto simdi = std::chrono::steady_clock::now();
+    auto gecen_sure_saniye = std::chrono::duration_cast<std::chrono::seconds>(simdi - baslangic_zamani);
+    auto gecen_sure_milisaniye = std::chrono::duration_cast<std::chrono::milliseconds>(simdi - baslangic_zamani);
+    auto saniye = gecen_sure_saniye.count();
+    auto milisaniye = gecen_sure_milisaniye.count();
+    if(min_i == 0){
+        min_i +=1;
+    }
+    x = odom_datas_x[min_i];
+    y = odom_datas_y[min_i];
+    yaw = atan2(odom_datas_y[min_i]-odom_datas_y[min_i-1],odom_datas_x[min_i]-odom_datas_x[min_i-1]);
+    while(true){
+    if(yaw > M_PI_2) { yaw -= M_PI;}
+    else if(yaw < -M_PI_2) { yaw += M_PI;}
+    else{break;}
+    }
+    xa2 = odom_datas_x[min_i+lp] - x;
+    ya2 = odom_datas_y[min_i+lp] - y;
+
+    alpha = atan(ya2 / xa2) - yaw;
+    if(alpha > M_PI_2) { alpha -= M_PI;}
+    if(alpha < -M_PI_2) { alpha += M_PI;}
+    if (yaw < 0) {
+        yaw += 2 * M_PI;
+    }
+    desired = desired_pid.calc(alpha);
+
+    if (desired>2)
+    {
+        desired=2;
+    }
+    if (desired<-2)
+    {
+        desired=-2;
+    }
+    
+    if (anglee > 2)
+    {
+        anglee=2;
+    }
+    if (anglee < -2)
+    {
+        anglee=-2;
+    }
+    if (isnan(desired))
+    {
+        desired=0;
+    }
+    std::ofstream dosya("/home/fatih/Desktop/ilayda/PID_SVL/src/pid/include/error_pid.csv", std::ios::app);
+    if (dosya.is_open()) {
+        dosya << saniye << "." << milisaniye  << ";" << anglee << ";" <<  desired << std::endl;
+        dosya.close();
+    } else {
+        std::cout << "Dosya acilamadi" << std::endl;
+    }
+
+    std::cout << desired << " a " << anglee << std::endl;
 }
 
 void PID_SUBS::PathCallback(const nav_msgs::Path::ConstPtr& msg)

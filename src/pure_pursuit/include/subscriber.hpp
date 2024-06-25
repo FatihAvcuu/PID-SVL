@@ -39,11 +39,13 @@ class SUBS
     tf::TransformBroadcaster br;
     std::string u="w";
   
-    double car_velocity,lp,axs,alpha,ld,c_error;
+    double car_velocity,lp,axs,alpha,ld,c_error,desired,anglee;
     double last_i = 0;
     int last_min_i = 1;
     int min_i=0;
+    int min_i2=0;
     double minValue=INT_MAX;
+    double minValue2=INT_MAX;
     std::string odom_topic;
     autoware_msgs::VehicleCmd svl_msg;
 

@@ -41,7 +41,7 @@ class PID_SUBS
     tf::TransformBroadcaster br;
     std::string u="w";
   
-    double kp1,ki1,kd1,car_velocity,lp;
+    double kp1,ki1,kd1,car_velocity,lp,desired,anglee;
     double last_i = 0;
     double xa2,ya2,alpha;
     int min_i=0;
@@ -50,6 +50,7 @@ class PID_SUBS
     std::string odom_topic;
     bool readParameters();
     get_pid_info::PID wheel_pid;
+    get_pid_info::PID desired_pid;
     std::chrono::time_point<std::chrono::steady_clock> baslangic_zamani;
     ros::Subscriber sub;
     ros::Subscriber sim_sub;

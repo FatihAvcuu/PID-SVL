@@ -70,6 +70,12 @@ subscriber.hpp
 stanley.hpp
 /home/fatih/Desktop/ilayda/PID_SVL/src/stanley/src/stanley.hpp
 
+/home/fatih/Desktop/ilayda/PID_SVL/src/stanley/src/subscriber_node.cpp
+ros/ros.h
+-
+subscriber.hpp
+/home/fatih/Desktop/ilayda/PID_SVL/src/stanley/src/subscriber.hpp
+
 /opt/ros/noetic/include/autoware_msgs/AccelCmd.h
 string
 -

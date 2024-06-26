@@ -58,15 +58,15 @@ void SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
         vehicle_cmd_pub.publish(svl_msg);
         return;
     }
-    double seq = msg->header.seq;
-    double x =   msg->pose.pose.position.x;
-    double y = msg->pose.pose.position.y;
-    double z =  msg->pose.pose.position.z;
+    seq = msg->header.seq;
+    x =   msg->pose.pose.position.x;
+    y = msg->pose.pose.position.y;
+    z =  msg->pose.pose.position.z;
     min_i=0;
     for (int i = 0; i < odom_datas_x.size(); i++)
     {
-        double xa = odom_datas_x[i] - x;
-        double ya = odom_datas_y[i] - y;
+        xa = odom_datas_x[i] - x;
+        ya = odom_datas_y[i] - y;
         if (minValue > abs(lp-sqrt(xa*xa+ya*ya)))
         {
             minValue= abs(lp-sqrt(xa*xa+ya*ya));
@@ -82,10 +82,10 @@ void SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     minValue = INT_MAX;
     minValue2 = INT_MAX;
     last_i = min_i;
-    double xa0 = odom_datas_x[min_i] - x;
-    double ya0 = odom_datas_y[min_i] - y;
-    double xa2 = odom_datas_x[min_i] - x;
-    double ya2 = odom_datas_y[min_i] - y;
+    xa0 = odom_datas_x[min_i] - x;
+    ya0 = odom_datas_y[min_i] - y;
+    xa2 = odom_datas_x[min_i] - x;
+    ya2 = odom_datas_y[min_i] - y;
     marker2.id = 1010;
     marker2.pose.position.x = odom_datas_x[min_i];
     marker2.pose.position.y = odom_datas_y[min_i];
@@ -98,7 +98,6 @@ void SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     marker_pub.publish(marker2);
     tf::Quaternion quat;
     tf::quaternionMsgToTF(msg->pose.pose.orientation, quat);
-    double roll, pitch, yaw;
     tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
     alpha = atan(ya2 / xa2) - yaw;
     if(alpha > M_PI_2) { alpha -= M_PI;}
@@ -116,8 +115,8 @@ void SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     svl_msg.header.stamp = ros::Time::now();
     svl_msg.header.frame_id = "base_link"; 
     svl_msg.twist_cmd.twist.linear.x = car_velocity; 
-    anglee =pure_pursite_ctr.calc(alpha,ld,axs)*4.2;
-    svl_msg.twist_cmd.twist.angular.z = anglee;
+    steering_angle =pure_pursite_ctr.calc(alpha,ld,axs)*4.2;
+    svl_msg.twist_cmd.twist.angular.z = steering_angle;
     vehicle_cmd_pub.publish(svl_msg);
     std_msgs::String output;
     std::stringstream ss;
@@ -154,7 +153,7 @@ void SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
 
     desired = pure_pursite_ctr.calc(alpha,ld,axs)*4.2;
 
-        if (desired>2)
+    if (desired>2)
     {
         desired=2;
     }
@@ -163,13 +162,13 @@ void SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
         desired=-2;
     }
     
-    if (anglee > 2)
+    if (steering_angle > 2)
     {
-        anglee=2;
+        steering_angle=2;
     }
-    if (anglee < -2)
+    if (steering_angle < -2)
     {
-        anglee=-2;
+        steering_angle=-2;
     }
     if (isnan(desired))
     {
@@ -178,13 +177,13 @@ void SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
 
     std::ofstream dosya("/home/fatih/Desktop/ilayda/PID_SVL/src/pure_pursuit/include/error_pp.csv", std::ios::app);
     if (dosya.is_open()) {
-        dosya << saniye << "." << milisaniye  << ";" << anglee << ";" <<  desired << std::endl;
+        dosya << saniye << "." << milisaniye  << ";" << steering_angle << ";" <<  desired << std::endl;
         dosya.close();
     } else {
         std::cout << "Dosya acilamadi" << std::endl;
     }
 
-    std::cout << desired << " a " << anglee << std::endl;
+    std::cout << desired << " a " << steering_angle << std::endl;
 }
 
 void SUBS::PathCallback(const nav_msgs::Path::ConstPtr& msg)

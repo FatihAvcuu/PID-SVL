@@ -55,7 +55,6 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
 {
      if (odom_datas_x.size()==0)
     {
-        autoware_msgs::VehicleCmd svl_msg;
         svl_msg.header.stamp = ros::Time::now();
         svl_msg.header.frame_id = "base_link"; 
         svl_msg.twist_cmd.twist.linear.x = 0; 
@@ -63,10 +62,10 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
         vehicle_cmd_pub.publish(svl_msg);
         return;
     }
-    double seq = msg->header.seq;
-    double x =   msg->pose.pose.position.x;
-    double y = msg->pose.pose.position.y;
-    double z =  msg->pose.pose.position.z;
+    seq = msg->header.seq;
+    x = msg->pose.pose.position.x;
+    y = msg->pose.pose.position.y;
+    z = msg->pose.pose.position.z;
     marker2.id = 1010;
     marker2.pose.position.x = x;
     marker2.pose.position.y = y;
@@ -81,8 +80,8 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     min_i=0;
     for (int i = 0; i < odom_datas_x.size(); i++)
     {
-        double xa = odom_datas_x[i] - x;
-        double ya = odom_datas_y[i] - y;
+        xa = odom_datas_x[i] - x;
+        ya = odom_datas_y[i] - y;
         if (minValue > abs(sqrt(xa*xa+ya*ya)) )
         {
             minValue= abs(sqrt(xa*xa+ya*ya));
@@ -98,7 +97,6 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     
     tf::Quaternion quat;
     tf::quaternionMsgToTF(msg->pose.pose.orientation, quat);
-    double roll, pitch, yaw;
     tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
     alpha = atan(ya2 / xa2) - yaw;
     if(alpha > M_PI_2) { alpha -= M_PI;}
@@ -123,12 +121,11 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     marker2.lifetime = ros::Duration();
     marker_pub.publish(marker2);
 
-    autoware_msgs::VehicleCmd svl_msg;
     svl_msg.header.stamp = ros::Time::now();
     svl_msg.header.frame_id = "base_link"; 
     svl_msg.twist_cmd.twist.linear.x = car_velocity; 
-    anglee=wheel_pid.calc(alpha);
-    svl_msg.twist_cmd.twist.angular.z = anglee;
+    steering_angle=wheel_pid.calc(alpha);
+    svl_msg.twist_cmd.twist.angular.z = steering_angle;
     vehicle_cmd_pub.publish(svl_msg);
     std_msgs::String output;
     std::stringstream ss;
@@ -173,13 +170,13 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
         desired=-2;
     }
     
-    if (anglee > 2)
+    if (steering_angle > 2)
     {
-        anglee=2;
+        steering_angle=2;
     }
-    if (anglee < -2)
+    if (steering_angle < -2)
     {
-        anglee=-2;
+        steering_angle=-2;
     }
     if (isnan(desired))
     {
@@ -187,13 +184,13 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     }
     std::ofstream dosya("/home/fatih/Desktop/ilayda/PID_SVL/src/pid/include/error_pid.csv", std::ios::app);
     if (dosya.is_open()) {
-        dosya << saniye << "." << milisaniye  << ";" << anglee << ";" <<  desired << std::endl;
+        dosya << saniye << "." << milisaniye  << ";" << steering_angle << ";" <<  desired << std::endl;
         dosya.close();
     } else {
         std::cout << "Dosya acilamadi" << std::endl;
     }
 
-    std::cout << desired << " a " << anglee << std::endl;
+    std::cout << desired << " a " << steering_angle << std::endl;
 }
 
 void PID_SUBS::PathCallback(const nav_msgs::Path::ConstPtr& msg)

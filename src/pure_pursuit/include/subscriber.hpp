@@ -39,7 +39,7 @@ class SUBS
     tf::TransformBroadcaster br;
     std::string u="w";
   
-    double car_velocity,lp,axs,alpha,ld,c_error,desired,anglee;
+    double car_velocity,lp,axs,alpha,ld,c_error,desired,steering_angle,roll, pitch, yaw,xa0,ya0,xa2,ya2,xa,ya,seq,x,y,z;
     double last_i = 0;
     int last_min_i = 1;
     int min_i=0;

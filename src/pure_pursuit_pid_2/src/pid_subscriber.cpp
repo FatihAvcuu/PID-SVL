@@ -76,10 +76,10 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
         vehicle_cmd_pub.publish(svl_msg);
         return;
     }
-    double seq = msg->header.seq;
-    double x =   msg->pose.pose.position.x;
-    double y = msg->pose.pose.position.y;
-    double z =  msg->pose.pose.position.z;
+    seq = msg->header.seq;
+    x =   msg->pose.pose.position.x;
+    y = msg->pose.pose.position.y;
+    z =  msg->pose.pose.position.z;
   
     marker2.id = 1010;
     marker2.pose.position.x = x;
@@ -113,6 +113,9 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     minValue = INT_MAX;
     minValue2 = INT_MAX;
     last_i = min_i;
+    if(min_i2 == 0){
+        min_i2 +=1;
+    }
     xa0 = odom_datas_x[min_i2] - x;
     ya0 = odom_datas_y[min_i2] - y;
     xa2 = odom_datas_x[min_i] - x;
@@ -120,7 +123,6 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     
     tf::Quaternion quat;
     tf::quaternionMsgToTF(msg->pose.pose.orientation, quat);
-    double roll, pitch, yaw;
     tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
     alpha = atan(ya2 / xa2) - yaw;
     if(alpha > M_PI_2) { alpha -= M_PI;}
@@ -163,14 +165,6 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     else if(waytrack < -M_PI_2) { waytrack += M_PI;}
     else{break;}
     }
-
-
-    waytrack2= atan(((y-1*sin(yaw))-odom_datas_y[min_i2]) / ((x-1*cos(yaw))-odom_datas_x[min_i2])) - yaw;
-    while(true){
-    if(waytrack2 > M_PI_2) { waytrack2 -= M_PI;}
-    else if(waytrack2 < -M_PI_2) { waytrack2 += M_PI;}
-    else{break;}
-    }
     if (  0  < waytrack)
     {
         c_calc= -(abs(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1]))*((x+lp*cos(yaw)*10) - odom_datas_x[min_i])    +odom_datas_y[min_i] - (y+lp*sin(yaw)*10))/sqrt((pow(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1])),2))+1));
@@ -179,25 +173,18 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     {
         c_calc= abs(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1]))*((x+lp*cos(yaw)*10) - odom_datas_x[min_i])    +odom_datas_y[min_i] - (y+lp*sin(yaw)*10))/sqrt((pow(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1])),2))+1);
     }
-    if( odom_datas_x[min_i2+1] == odom_datas_x[min_i2] || odom_datas_y[min_i2+1] == odom_datas_y[min_i2]){
-        c_error= last_c_error;
+    dx = odom_datas_x[min_i2] - odom_datas_x[min_i2 - 1];
+    dy = odom_datas_y[min_i2] - odom_datas_y[min_i2 - 1];
+    c_error = (dy * (x - odom_datas_x[min_i2]) - dx * (y - odom_datas_y[min_i2])) / sqrt(dx * dx + dy * dy);
+    if(isnan(c_error)){
+        c_error=0;
     }
-    else if (  0  > waytrack2){
-        last_c_error= -(abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
-        c_error= -(abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
-    }
-    else
-    {
-        last_c_error= (abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
-        c_error= (abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
-    }
-    double anglee = 0;
     svl_msg.header.stamp = ros::Time::now();
     svl_msg.header.frame_id = "base_link"; 
     svl_msg.twist_cmd.twist.linear.x = car_velocity; 
     
-    anglee=pure_pursite_ctr.calc(alpha,ld,axs)*4 + wheel_pid.calc(c_error,ld,c_calc);
-    svl_msg.twist_cmd.twist.angular.z = anglee;
+    steering_angle=pure_pursite_ctr.calc(alpha,ld,axs)*4 + wheel_pid.calc(c_error,ld,c_calc);
+    svl_msg.twist_cmd.twist.angular.z = steering_angle;
 
     vehicle_cmd_pub.publish(svl_msg);
     std_msgs::String output;
@@ -238,14 +225,6 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     else if(waytrack < -M_PI_2) { waytrack += M_PI;}
     else{break;}
     }
-
-
-    waytrack2= atan(((y-1*sin(yaw))-odom_datas_y[min_i2]) / ((x-1*cos(yaw))-odom_datas_x[min_i2])) - yaw;
-    while(true){
-    if(waytrack2 > M_PI_2) { waytrack2 -= M_PI;}
-    else if(waytrack2 < -M_PI_2) { waytrack2 += M_PI;}
-    else{break;}
-    }
     if (  0  < waytrack)
     {
         c_calc= -(abs(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1]))*((x+lp*cos(yaw)*10) - odom_datas_x[min_i])    +odom_datas_y[min_i] - (y+lp*sin(yaw)*10))/sqrt((pow(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1])),2))+1));
@@ -254,17 +233,11 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     {
         c_calc= abs(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1]))*((x+lp*cos(yaw)*10) - odom_datas_x[min_i])    +odom_datas_y[min_i] - (y+lp*sin(yaw)*10))/sqrt(((pow(((odom_datas_y[min_i] - odom_datas_y[min_i-1])/(odom_datas_x[min_i] - odom_datas_x[min_i-1])),2))+1));
     }
-    if( odom_datas_x[min_i2+1] == odom_datas_x[min_i2] || odom_datas_y[min_i2+1] == odom_datas_y[min_i2]){
-        c_error= last_c_error;
-    }
-    else if (  0  > waytrack2){
-       last_c_error= -(abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
-        c_error= -(abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
-    }
-    else
-    {
-        last_c_error= (abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt((pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2))+1));
-        c_error= (abs(((odom_datas_y[min_i2] - odom_datas_y[min_i2+1])/(odom_datas_x[min_i2] - odom_datas_x[min_i2+1]))*((x) - odom_datas_x[min_i2])+odom_datas_y[min_i2+1] - (y))/sqrt(pow(((odom_datas_y[min_i2+1] - odom_datas_y[min_i2])/(odom_datas_x[min_i2+1] - odom_datas_x[min_i2])),2)+1));
+
+
+    c_error = (dy * (x - odom_datas_x[min_i2]) - dx * (y - odom_datas_y[min_i2])) / sqrt(dx * dx + dy * dy);
+    if(isnan(c_error)){
+        c_error=0;
     }
 
      auto simdi = std::chrono::steady_clock::now();
@@ -284,13 +257,13 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
             desired=-2;
         }
         
-        if (anglee > 2)
+        if (steering_angle > 2)
         {
-            anglee=2;
+            steering_angle=2;
         }
-        if (anglee < -2)
+        if (steering_angle < -2)
         {
-            anglee=-2;
+            steering_angle=-2;
         }
         if (isnan(desired))
         {
@@ -301,13 +274,12 @@ void PID_SUBS::SimOdomCallback(const nav_msgs::Odometry::ConstPtr& msg)
         
          std::ofstream dosya("/home/fatih/Desktop/ilayda/PID_SVL/src/pure_pursuit_pid_2/include/error_stanley.csv", std::ios::app);
     if (dosya.is_open()) {
-        dosya << saniye << "." << milisaniye  << ";" << anglee << ";" <<  desired << std::endl;
+        dosya << saniye << "." << milisaniye  << ";" << steering_angle << ";" <<  desired << std::endl;
         dosya.close();
     } else {
         std::cout << "Dosya acilamadi" << std::endl;
     }
 
-    std::cout << desired << " a " << anglee << std::endl;
 
 }
 

@@ -124,3 +124,11 @@
 /home/fatih/Desktop/ilayda/PID_SVL/build/pure_pursuit_pid_2/CMakeFiles/edit_cache.dir
 /home/fatih/Desktop/ilayda/PID_SVL/build/pure_pursuit_pid_2/CMakeFiles/test.dir
 /home/fatih/Desktop/ilayda/PID_SVL/build/pure_pursuit_pid_2/CMakeFiles/pidSub3.dir
+/home/fatih/Desktop/ilayda/PID_SVL/build/stanley/CMakeFiles/install/strip.dir
+/home/fatih/Desktop/ilayda/PID_SVL/build/stanley/CMakeFiles/install/local.dir
+/home/fatih/Desktop/ilayda/PID_SVL/build/stanley/CMakeFiles/install.dir
+/home/fatih/Desktop/ilayda/PID_SVL/build/stanley/CMakeFiles/list_install_components.dir
+/home/fatih/Desktop/ilayda/PID_SVL/build/stanley/CMakeFiles/rebuild_cache.dir
+/home/fatih/Desktop/ilayda/PID_SVL/build/stanley/CMakeFiles/edit_cache.dir
+/home/fatih/Desktop/ilayda/PID_SVL/build/stanley/CMakeFiles/test.dir
+/home/fatih/Desktop/ilayda/PID_SVL/build/stanley/CMakeFiles/StanleySUB.dir

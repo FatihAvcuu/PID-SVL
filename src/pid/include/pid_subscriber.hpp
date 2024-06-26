@@ -41,7 +41,7 @@ class PID_SUBS
     tf::TransformBroadcaster br;
     std::string u="w";
   
-    double kp1,ki1,kd1,car_velocity,lp,desired,anglee;
+    double kp1,ki1,kd1,car_velocity,lp,desired,steering_angle,roll, pitch, yaw,xa,ya,seq,x,y,z;
     double last_i = 0;
     double xa2,ya2,alpha;
     int min_i=0;
@@ -49,6 +49,7 @@ class PID_SUBS
     double minValue=INT_MAX;
     std::string odom_topic;
     bool readParameters();
+    autoware_msgs::VehicleCmd svl_msg;
     get_pid_info::PID wheel_pid;
     get_pid_info::PID desired_pid;
     std::chrono::time_point<std::chrono::steady_clock> baslangic_zamani;
